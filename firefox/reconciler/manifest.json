@@ -9,6 +9,13 @@
     "icons": {
       "48": "icons/border-48.png"
     },
+
+    "content_scripts": [
+      {
+        "matches": ["*://*.amazon.com/*"],
+        "js": ["pdf.js"]
+      }
+    ],
   
     "sidebar_action": {
       "default_title": "Reconciler",

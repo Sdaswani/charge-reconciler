@@ -19,6 +19,19 @@ message.
 */ 
 function displayFile(fileList) {
   const imageURL = window.URL.createObjectURL(fileList[0]);
+  // Loaded via <script> tag, create shortcut to access PDF.js exports.
+  var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+  // The workerSrc property shall be specified.
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
+
+  var loadingTask = pdfjsLib.getDocument(imageURL);
+  loadingTask.promise.then(function(pdf) {
+   console.log("pdf loaded")
+  }, function (reason) {
+    // PDF loading error
+    console.error(reason);
+  });
   alert("i aim to misbehave")
 }
 
