@@ -10,11 +10,9 @@
       "48": "icons/border-48.png"
     },
   
-    "content_scripts": [
-      {
-        "matches": ["*://*.mozilla.org/*"],
-        "js": ["reconciler.js"]
-      }
-    ]
+    "sidebar_action": {
+      "default_title": "Reconciler",
+      "default_panel": "sidebar/sidebar.html"
+    }
   
   }
