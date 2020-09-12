@@ -1,0 +1,20 @@
+{
+
+    "manifest_version": 2,
+    "name": "Reconciler",
+    "version": "0.1",
+  
+    "description": "https://github.com/Sdaswani/charge-reconciler/blob/master/README.md",
+  
+    "icons": {
+      "48": "icons/border-48.png"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.mozilla.org/*"],
+        "js": ["reconciler.js"]
+      }
+    ]
+  
+  }
