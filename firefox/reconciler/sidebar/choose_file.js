@@ -48,7 +48,11 @@ function displayFile(fileList) {
   const imageURL = window.URL.createObjectURL(fileList[0]);
   // waiting on gettext to finish completion, or error
   gettext(imageURL).then(function (text) {
-    alert('parse ' + text);
+    var textEls = text.split(" ");
+    for (i = 0; i < textEls.length; i++) {
+      if (/\d{3}-\d{7}-\d{7}/.test(textEls[i]))
+        console.log(textEls[i].substring(0,19));
+    }
   },
   function (reason) {
     console.error(reason);
