@@ -58,6 +58,9 @@ function addRow(content,morecontent) {
 
 function clearOrderTable() {
   rowCount = 0;
+  if (!document.getElementById) return;
+  tabBody=document.getElementById("idTable");
+  tabBody.innerHTML = "<h1>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
 }
 
 /* 
