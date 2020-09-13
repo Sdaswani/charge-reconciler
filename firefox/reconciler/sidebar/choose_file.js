@@ -13,27 +13,48 @@ function handlePicked() {
   displayFile(this.files);
 }
 
+function gettext(pdfUrl){
+  var PDFJS = window['pdfjs-dist/build/pdf'];
+
+  // The workerSrc property shall be specified.
+  PDFJS.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
+  var pdfDoc = PDFJS.getDocument(pdfUrl);
+  return pdfDoc.promise.then(function(pdf) { // get all pages text
+    var maxPages = pdf._pdfInfo.numPages;
+    var countPromises = []; // collecting all page promises
+    for (var j = 1; j <= maxPages; j++) {
+      var page = pdf.getPage(j);
+
+      var txt = "";
+      countPromises.push(page.then(function(page) { // add page promise
+        var textContent = page.getTextContent();
+        return textContent.then(function(text){ // return content promise
+          return text.items.map(function (s) { return s.str; }).join(''); // value page text
+        });
+      }));
+    }
+    // Wait for all pages and join text
+    return Promise.all(countPromises).then(function (texts) {
+      return texts.join('');
+    });
+  });
+}
+
 /* 
 Insert the content script and send the image file ObjectURL to the content script using a 
 message.
 */ 
 function displayFile(fileList) {
   const imageURL = window.URL.createObjectURL(fileList[0]);
-  // Loaded via <script> tag, create shortcut to access PDF.js exports.
-  var pdfjsLib = window['pdfjs-dist/build/pdf'];
-
-  // The workerSrc property shall be specified.
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
-
-  var loadingTask = pdfjsLib.getDocument(imageURL);
-  loadingTask.promise.then(function(pdf) {
-   console.log("pdf loaded")
-  }, function (reason) {
-    // PDF loading error
+  // waiting on gettext to finish completion, or error
+  gettext(imageURL).then(function (text) {
+    alert('parse ' + text);
+  },
+  function (reason) {
     console.error(reason);
   });
-  alert("i aim to misbehave")
 }
+
 
 // Ignore the drag enter event - not used in this extension
 function dragenter(e) {
