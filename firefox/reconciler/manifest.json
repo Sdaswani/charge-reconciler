@@ -9,6 +9,14 @@
     "icons": {
       "48": "icons/border-48.png"
     },
+
+    "permissions": [
+      "tabs"
+    ],
+
+    "background": {
+      "scripts": ["reconciler.js"]
+    },
   
     "sidebar_action": {
       "default_title": "Reconciler",

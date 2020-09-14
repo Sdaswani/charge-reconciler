@@ -7,11 +7,18 @@ active tab ID.
 // Listen for a file being selected through the file picker
 const inputElement = document.getElementById("input");
 inputElement.addEventListener("change", handlePicked, false);
-var rowCount;
+const scanElement = document.getElementById("scan");
+scanElement.addEventListener("click", handleScanRequest, false);
+var orderSet = new Set();
 
 // Get the image file if it was chosen from the pick list
 function handlePicked() {
   displayFile(this.files);
+}
+
+function handleScanRequest() {
+  orderSet.forEach(function(value) {
+  })
 }
 
 function gettext(pdfUrl){
@@ -48,16 +55,17 @@ function addRow(content,morecontent) {
   cell1 = document.createElement("td");
   var a = document.createElement('a');  
   var link = document.createTextNode(content);   
-  a.appendChild(link);  
-  a.href = "https://www.amazon.com/gp/your-account/order-history/ref=ppx_yo_dt_b_search?opt=ab&search=".concat(content);
+  a.appendChild(link);
+  var orderUrl = "https://www.amazon.com/gp/your-account/order-history/ref=ppx_yo_dt_b_search?opt=ab&search=".concat(content);
+  a.href = orderUrl; 
+  orderSet.add(orderUrl);
   cell1.appendChild(a);
   row.appendChild(cell1);
   tabBody.appendChild(row);
-  rowCount++;
 }
 
 function clearOrderTable() {
-  rowCount = 0;
+  orderSet.clear();
   if (!document.getElementById) return;
   tabBody=document.getElementById("idTable");
   tabBody.innerHTML = "<h1>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
@@ -81,6 +89,7 @@ function displayFile(fileList) {
   function (reason) {
     console.error(reason);
   });
+  //browser.tabs.update({url: "https://developer.mozilla.org"});
 }
 
 
