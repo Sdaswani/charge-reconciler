@@ -1,27 +1,57 @@
-/*
-Listens for a file being selected, creates a ObjectURL for the chosen file, injects a
-content script into the active tab then passes the image URL through a message to the
-active tab ID.
-*/
+// Does a lot more than choose a file! :) :(
+
+// GLOBAL VARS for synchronizing computation
+var orderSet = new Set();
+// var currentTabID;
+// var currentOrderURL;
+// var currentOrderURLLoaded;
 
 // Listen for a file being selected through the file picker
 const inputElement = document.getElementById("input");
-inputElement.addEventListener("change", handlePicked, false);
+inputElement.addEventListener("change", handleFilePicked, false);
+
+// Listen for button clicks on the scan button
 const scanElement = document.getElementById("scan");
 scanElement.addEventListener("click", handleScanRequest, false);
-var orderSet = new Set();
 
-// Get the image file if it was chosen from the pick list
-function handlePicked() {
-  displayFile(this.files);
+function handleFilePicked() {
+  loadPDFParseDisplayResults(this.files);
 }
 
 function handleScanRequest() {
-  orderSet.forEach(function(value) {
-  })
+  scanElement.disabled = true;
+  // browser.tabs.onUpdated.addListener(handleUpdated);
+  // orderSet.forEach(function(value) {
+  //   browser.tabs.update({url: value});
+  //   loadOrder(value).then(result => console.log(loadingDone))
+  // });
+  // browser.tabs.onUpdated.removeListener(handleUpdated);
+  scanElement.disabled = false;
 }
 
-function gettext(pdfUrl){
+// function handleUpdated(tabId, changeInfo, tabInfo) {
+//   console.log("Updated tab: " + tabId);
+//   console.log("Changed attributes: ");
+//   console.log(changeInfo);
+//   if (changeInfo.url.equals(currrentOrderURL))
+//     currentTabID = changeInfo.tabId;
+//   if (changeInfo.status.equals("complete") && (changeInfo.tabId == currentTabID))
+//     currentOrderURLLoaded = true;
+// }
+
+// PROMISES
+// function loadOrder(url) {
+//   currrentOrderURL = url;
+//   currentOrderURLLoaded = false;
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       if (currentOrderURLLoaded)
+//         resolve();  
+//     }, 500);
+//   });
+// }
+
+function parseAmazonOrderIDsFromPDF(pdfUrl){
   var PDFJS = window['pdfjs-dist/build/pdf'];
 
   // The workerSrc property shall be specified.
@@ -48,7 +78,7 @@ function gettext(pdfUrl){
   });
 }
 
-function addRow(content,morecontent) {
+function addRowToOrderTable(content,morecontent) {
   if (!document.getElementById) return;
   tabBody=document.getElementById("idTable");
   row=document.createElement("tr");
@@ -71,36 +101,17 @@ function clearOrderTable() {
   tabBody.innerHTML = "<h1>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
 }
 
-/* 
-Insert the content script and send the image file ObjectURL to the content script using a 
-message.
-*/ 
-function displayFile(fileList) {
+function loadPDFParseDisplayResults(fileList) {
   if (fileList[0]) clearOrderTable();
   const imageURL = window.URL.createObjectURL(fileList[0]);
-  // waiting on gettext to finish completion, or error
-  gettext(imageURL).then(function (text) {
+  parseAmazonOrderIDsFromPDF(imageURL).then(function (text) {
     var textEls = text.split(" ");
     for (i = 0; i < textEls.length; i++) {
       if (/\d{3}-\d{7}-\d{7}/.test(textEls[i]))
-        addRow(textEls[i].substring(0,19), "link")
+        addRowToOrderTable(textEls[i].substring(0,19), "link")
     }
   },
   function (reason) {
     console.error(reason);
   });
-  //browser.tabs.update({url: "https://developer.mozilla.org"});
-}
-
-
-// Ignore the drag enter event - not used in this extension
-function dragenter(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
-
-// Ignore the drag over event - not used in this extension
-function dragover(e) {
-  e.stopPropagation();
-  e.preventDefault();
 }
