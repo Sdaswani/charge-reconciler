@@ -2,9 +2,10 @@
 
 // GLOBAL VARS for synchronizing computation
 var orderSet = new Set();
-// var currentTabID;
-// var currentOrderURL;
-// var currentOrderURLLoaded;
+var orderIterator;
+var currentTabID;
+var currentOrderURL;
+var currentOrderURLLoaded;
 
 // Listen for a file being selected through the file picker
 const inputElement = document.getElementById("input");
@@ -18,26 +19,53 @@ function handleFilePicked() {
   loadPDFParseDisplayResults(this.files);
 }
 
-function handleScanRequest() {
+
+function handleUpdated(tabId, changeInfo, tabInfo) {
+  if (!changeInfo) return;
+  if ((changeInfo.url !== undefined) && (changeInfo.url == currentOrderURL)) {
+    currentTabID = tabId;
+    console.log("tab id is " + currentTabID);
+  }
+  if ((changeInfo.status != undefined) && (changeInfo.status == "complete") && (tabId == currentTabID)) {
+    currentOrderURLLoaded = true;
+    console.log("tab is done loading");
+    iterateScan();
+  }
+}
+
+function setupScan() {
   scanElement.disabled = true;
-  // browser.tabs.onUpdated.addListener(handleUpdated);
+  inputElement.disabled = true;
+  orderIterator = orderSet[Symbol.iterator]();
+  browser.tabs.onUpdated.addListener(handleUpdated);
+}
+
+function teardownScan() {
+    browser.tabs.onUpdated.removeListener(handleUpdated);
+    scanElement.disabled = false;
+    inputElement.disabled = false;
+    orderIterator = null;
+}
+
+function iterateScan() {
+  currentOrderURL = orderIterator.next().value;
+  if (!currentOrderURL) {
+    teardownScan();
+    return;
+  }
+  browser.tabs.update({url: currentOrderURL}); 
+}
+
+function handleScanRequest() {
+  setupScan();
+  iterateScan();
   // orderSet.forEach(function(value) {
   //   browser.tabs.update({url: value});
   //   loadOrder(value).then(result => console.log(loadingDone))
   // });
-  // browser.tabs.onUpdated.removeListener(handleUpdated);
-  scanElement.disabled = false;
+
 }
 
-// function handleUpdated(tabId, changeInfo, tabInfo) {
-//   console.log("Updated tab: " + tabId);
-//   console.log("Changed attributes: ");
-//   console.log(changeInfo);
-//   if (changeInfo.url.equals(currrentOrderURL))
-//     currentTabID = changeInfo.tabId;
-//   if (changeInfo.status.equals("complete") && (changeInfo.tabId == currentTabID))
-//     currentOrderURLLoaded = true;
-// }
 
 // PROMISES
 // function loadOrder(url) {
