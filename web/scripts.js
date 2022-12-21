@@ -109,7 +109,8 @@ function addRowToOrderTable(content,morecontent) {
   var link = document.createTextNode(content);   
   a.appendChild(link);
   var orderUrl = "https://www.amazon.com/gp/your-account/order-history/ref=ppx_yo_dt_b_search?opt=ab&search=".concat(content);
-  a.href = orderUrl; 
+  a.href = orderUrl;
+  a.target="_blank"; 
   orderSet.add(orderUrl);
   cell1.appendChild(a);
   row.appendChild(cell1);

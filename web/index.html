@@ -28,24 +28,27 @@
 <body translate="no">
   <div class="container">
     <div class="shadowbox">
-      <p style="color:black;text-align: center;font-weight: bold;">AMAZON CHARGE RECONCILER</p>
+      <p style="color:black;text-align: center;font-weight: bold;">WTF Did I Buy?</p>
       <p>Do you ever scan your credit card bill and have no clue what the various amazon charges are for? Simply upload
         your credit card bill below and links to the specific orders will be created.</p>
       <p>Your credit card bill is not uploaded and all processing is done locally in your browser.</p>
+      <p>Be sure to be logged into your Amazon account so the orders open properly.</p>
     </div><br>
     <form class="form">
       <div class="file-upload-wrapper" data-text="Select your file!">
         <input id="input" name="file-upload-field" type="file" class="file-upload-field" value="" accept="application/pdf">
       </div>
     </form>
+    
+    <div id="idTable" class="orderbox">
+      <h1>ORDERS</h1>
+      <table id='mytable'>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div id="idTable">
-    <h1>ORDERS</h1>
-    <table id='mytable'>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
+
   <script src='pdf.js'></script>
   <script src='pdf.worker.js'></script>
   <script src='scripts.js'></script>
