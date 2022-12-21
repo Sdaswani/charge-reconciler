@@ -67,7 +67,7 @@ body {
 }
 
 .file-upload-wrapper:before {
-  content: "Upload";
+  content: "Scan";
   position: absolute;
   top: 0;
   right: 0;
