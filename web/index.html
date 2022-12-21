@@ -2,144 +2,17 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
-
   <link rel="apple-touch-icon" type="image/png"
     href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
   <meta name="apple-mobile-web-app-title" content="CodePen">
-
   <link rel="shortcut icon" type="image/x-icon"
     href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
-
   <link rel="mask-icon" type="image/x-icon"
     href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg"
     color="#111" />
-
-
+  <link rel="stylesheet" href="styles.css">
   <title>WTF Did I Buy?</title>
-
-
-
-
-  <style>
-    @import url(https://fonts.googleapis.com/css?family=Lato:400,700,300);
-
-    body {
-      font-family: "Lato", sans-serif;
-    }
-
-    .container {
-      position: relative;
-      height: 100vh;
-      -webkit-box-align: center;
-      -moz-box-align: center;
-      box-align: center;
-      -webkit-align-items: center;
-      -moz-align-items: center;
-      -ms-align-items: center;
-      -o-align-items: center;
-      align-items: center;
-      -ms-flex-align: center;
-      display: -webkit-box;
-      display: -moz-box;
-      display: box;
-      display: -webkit-flex;
-      display: -moz-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-      -moz-box-pack: center;
-      box-pack: center;
-      -webkit-justify-content: center;
-      -moz-justify-content: center;
-      -ms-justify-content: center;
-      -o-justify-content: center;
-      justify-content: center;
-      -ms-flex-pack: center;
-      background-color: #bf7a6b;
-      background-image: -webkit-linear-gradient(bottom left, #bf7a6b 0%, #e6d8a7 100%);
-      background-image: linear-gradient(to top right, #bf7a6b 0%, #e6d8a7 100%);
-    }
-
-    .form {
-      width: 400px;
-    }
-
-    .file-upload-wrapper {
-      position: relative;
-      width: 100%;
-      height: 60px;
-    }
-
-    .file-upload-wrapper:after {
-      content: attr(data-text);
-      font-size: 18px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: #fff;
-      padding: 10px 15px;
-      display: block;
-      width: calc(100% - 40px);
-      pointer-events: none;
-      z-index: 20;
-      height: 40px;
-      line-height: 40px;
-      color: #999;
-      border-radius: 5px 10px 10px 5px;
-      font-weight: 300;
-    }
-
-    .file-upload-wrapper:before {
-      content: "Upload";
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: inline-block;
-      height: 60px;
-      background: #4daf7c;
-      color: #fff;
-      font-weight: 700;
-      z-index: 25;
-      font-size: 16px;
-      line-height: 60px;
-      padding: 0 15px;
-      text-transform: uppercase;
-      pointer-events: none;
-      border-radius: 0 5px 5px 0;
-    }
-
-    .file-upload-wrapper:hover:before {
-      background: #3d8c63;
-    }
-
-    .file-upload-wrapper input {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 99;
-      height: 40px;
-      margin: 0;
-      padding: 0;
-      display: block;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .shadowbox {
-      position: absolute;
-      top: 0;
-      width: 30em;
-      border: 20px solid #bf7a6b;
-      box-shadow: 8px 8px 5px #444;
-      background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
-      padding: 30px 30px;
-    }
-  </style>
 
   <script>
     window.console = window.console || function (t) { };
