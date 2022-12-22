@@ -4,6 +4,7 @@ var orderIterator;
 var currentTabID;
 var currentOrderURL;
 var currentOrderURLLoaded;
+document.getElementById("idTable").style.display = "none";
 
 // Listen for a file being selected through the file picker
 const inputElement = document.getElementById("input");
@@ -126,6 +127,7 @@ function clearOrderTable() {
 
 function loadPDFParseDisplayResults(fileList) {
   if (fileList[0]) clearOrderTable();
+  document.getElementById("idTable").style.display = "block";
   const imageURL = window.URL.createObjectURL(fileList[0]);
   parseAmazonOrderIDsFromPDF(imageURL).then(function (text) {
     var textEls = text.split(" ");
