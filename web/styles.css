@@ -29,11 +29,6 @@ body {
   -webkit-box-pack: center;
   -moz-box-pack: center;
   box-pack: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  -o-justify-content: center;
-  justify-content: center;
   -ms-flex-pack: center;
   background-color: #bf7a6b;
   background-image: -webkit-linear-gradient(bottom left, #bf7a6b 0%, #e6d8a7 100%);
