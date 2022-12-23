@@ -62,7 +62,7 @@ function clearOrderTable() {
   orderSet.clear();
   if (!document.getElementById) return;
   tabBody=document.getElementById("orderTable");
-  tabBody.innerHTML = "<h1 id='ordersHeader'>ORDERS</h1><table id='table'><tbody></tbody></table>"
+  tabBody.innerHTML = "<center><h1 id='ordersHeader'>Amazon<br>Orders</h1></center><table id='table'><tbody></tbody></table>"
 }
 
 function loadPDFParseDisplayResults(fileList) {
