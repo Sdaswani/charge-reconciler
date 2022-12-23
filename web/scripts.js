@@ -122,19 +122,24 @@ function clearOrderTable() {
   orderSet.clear();
   if (!document.getElementById) return;
   tabBody=document.getElementById("idTable");
-  tabBody.innerHTML = "<h1>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
+  tabBody.innerHTML = "<h1 id='ordersHeader'>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
 }
 
 function loadPDFParseDisplayResults(fileList) {
   if (fileList[0]) clearOrderTable();
+  var rowsAdded = 0;
   document.getElementById("idTable").style.display = "block";
   const imageURL = window.URL.createObjectURL(fileList[0]);
   parseAmazonOrderIDsFromPDF(imageURL).then(function (text) {
     var textEls = text.split(" ");
     for (i = 0; i < textEls.length; i++) {
-      if (/\d{3}-\d{7}-\d{7}/.test(textEls[i]))
+      if (/\d{3}-\d{7}-\d{7}/.test(textEls[i])) {
         addRowToOrderTable(textEls[i].substring(0,19), "link")
+        rowsAdded++;
+      }
     }
+    if (rowsAdded < 1)
+        document.getElementById("ordersHeader").innerHTML = "No Amazon orders found. Check <a href=faq.html target='_blank'>FAQ</a> for supported credit card statements.";
   },
   function (reason) {
     console.error(reason);
