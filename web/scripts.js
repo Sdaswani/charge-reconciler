@@ -4,75 +4,15 @@ var orderIterator;
 var currentTabID;
 var currentOrderURL;
 var currentOrderURLLoaded;
-document.getElementById("idTable").style.display = "none";
+document.getElementById("orderTable").style.display = "none";
 
 // Listen for a file being selected through the file picker
-const inputElement = document.getElementById("input");
-inputElement.addEventListener("change", handleFilePicked, false);
+const inputElement = document.getElementById("fileSelection");
+inputElement.addEventListener("change", handleFileSelection, false);
 
-function handleFilePicked() {
+function handleFileSelection() {
   loadPDFParseDisplayResults(this.files);
 }
-
-
-function handleUpdated(tabId, changeInfo, tabInfo) {
-  if (!changeInfo) return;
-  if ((changeInfo.url !== undefined) && (changeInfo.url == currentOrderURL)) {
-    currentTabID = tabId;
-    console.log("tab id is " + currentTabID);
-  }
-  if ((changeInfo.status != undefined) && (changeInfo.status == "complete") && (tabId == currentTabID)) {
-    currentOrderURLLoaded = true;
-    console.log("tab is done loading");
-    iterateScan();
-  }
-}
-
-function setupScan() {
-  scanElement.disabled = true;
-  inputElement.disabled = true;
-  orderIterator = orderSet[Symbol.iterator]();
-  browser.tabs.onUpdated.addListener(handleUpdated);
-}
-
-function teardownScan() {
-    browser.tabs.onUpdated.removeListener(handleUpdated);
-    scanElement.disabled = false;
-    inputElement.disabled = false;
-    orderIterator = null;
-}
-
-function iterateScan() {
-  currentOrderURL = orderIterator.next().value;
-  if (!currentOrderURL) {
-    teardownScan();
-    return;
-  }
-  browser.tabs.update({url: currentOrderURL}); 
-}
-
-function handleScanRequest() {
-  setupScan();
-  iterateScan();
-  // orderSet.forEach(function(value) {
-  //   browser.tabs.update({url: value});
-  //   loadOrder(value).then(result => console.log(loadingDone))
-  // });
-
-}
-
-
-// PROMISES
-// function loadOrder(url) {
-//   currrentOrderURL = url;
-//   currentOrderURLLoaded = false;
-//   return new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//       if (currentOrderURLLoaded)
-//         resolve();  
-//     }, 500);
-//   });
-// }
 
 function parseAmazonOrderIDsFromPDF(pdfUrl){
   var PDFJS = window['pdfjs-dist/build/pdf'];
@@ -103,7 +43,7 @@ function parseAmazonOrderIDsFromPDF(pdfUrl){
 
 function addRowToOrderTable(content,morecontent) {
   if (!document.getElementById) return;
-  tabBody=document.getElementById("idTable");
+  tabBody=document.getElementById("orderTable");
   row=document.createElement("tr");
   cell1 = document.createElement("td");
   var a = document.createElement('a');  
@@ -121,19 +61,19 @@ function addRowToOrderTable(content,morecontent) {
 function clearOrderTable() {
   orderSet.clear();
   if (!document.getElementById) return;
-  tabBody=document.getElementById("idTable");
-  tabBody.innerHTML = "<h1 id='ordersHeader'>ORDERS</h1><table id='mytable'><tbody></tbody></table>"
+  tabBody=document.getElementById("orderTable");
+  tabBody.innerHTML = "<h1 id='ordersHeader'>ORDERS</h1><table id='table'><tbody></tbody></table>"
 }
 
 function loadPDFParseDisplayResults(fileList) {
   if (fileList[0]) clearOrderTable();
   var rowsAdded = 0;
-  document.getElementById("idTable").style.display = "block";
+  document.getElementById("orderTable").style.display = "block";
   const imageURL = window.URL.createObjectURL(fileList[0]);
   parseAmazonOrderIDsFromPDF(imageURL).then(function (text) {
     var textEls = text.split(" ");
     for (i = 0; i < textEls.length; i++) {
-      if (/\d{3}-\d{7}-\d{7}/.test(textEls[i])) {
+      if (/\d{3}-\d{7}-\d{7}/.test(textEls[i])) { // Amazon Order IDs are numeric xxx-xxxxxxx-xxxxxxx
         addRowToOrderTable(textEls[i].substring(0,19), "link")
         rowsAdded++;
       }
